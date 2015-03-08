@@ -22,12 +22,12 @@ public class AppSecAsst1 {
      * @param args the command line arguments
      */
     public static void main(String[] args){
-        //String cipherTextPath = args[0];
-        //String keyPath = args[1];
-  
-       String cipherTextPath = "C:/Users/Rajat-HP/Documents/cipher";
-       String keyPath = "C:/Users/Rajat-HP/Documents/key";
         
+    	
+    	// pass args[0] and args[1] two seperate directories. In 0, we store ciphers and in 1 we store keys   
+    	String cipherTextPath = args[0];
+        String keyPath = args[1];
+   
         try {
             TaskSelector myTaskSelector = new TaskSelector(keyPath,cipherTextPath);
         } catch (NoSuchAlgorithmException ex) {

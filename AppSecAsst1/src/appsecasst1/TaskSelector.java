@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +22,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -90,11 +92,14 @@ public class TaskSelector {
         // TODO code application logic here
     }
 
-    private void encryptAndStore(String inputUsername, String inputPassword) throws InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, FileNotFoundException {
+    private void encryptAndStore(String inputUsername, String inputPassword) throws InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, FileNotFoundException, UnsupportedEncodingException {
         // encrypt the  username and password
 
         byte[] encryptedUsername = myAES.encrypt(inputUsername);
+        
+        
         byte[] encryptedPassword = myAES.encrypt(inputPassword);
+        
 
         // store the username and password line by line
         ArrayList inputByteList = new ArrayList();
@@ -122,6 +127,8 @@ public class TaskSelector {
             while (true) {
                 try {
                     tempArrayList.add(myOIS.readObject());
+                   // myOIS.close();
+                   // myFIS.close();
                 } catch (EOFException ex) {
                     break;
                 } catch (IOException ex) {
@@ -174,8 +181,10 @@ public class TaskSelector {
      *
      * @param inputUsername
      * @param inputPassword
+     * @throws UnsupportedEncodingException 
      */
-    private void checkCredentials(String inputUsername, String inputPassword) {
+    private void checkCredentials(String inputUsername, String inputPassword) throws UnsupportedEncodingException {
+    	
         try {
             ArrayList currentList = getFileList(keyFile);
             if (currentList.size() % 2 != 0) {
@@ -187,8 +196,13 @@ public class TaskSelector {
 
                 while (currentListIt.hasNext()) {
                     try {
-                        byte[] currentCheckUsername = (byte[]) currentListIt.next();
+                        
+                    	
+                    	byte[] currentCheckUsername = (byte[]) currentListIt.next();
                         byte[] currentCheckPassword = (byte[]) currentListIt.next();
+                        
+                      
+                        
 
                         // decrypt both and check if true
                         String currentUName = myAES.decrypt(currentCheckUsername);
